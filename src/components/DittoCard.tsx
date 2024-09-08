@@ -17,11 +17,12 @@ import { Ditto } from "../types/ditto";
 
 interface DittoCardProps  extends React.HTMLAttributes<HTMLParagraphElement>{
   ditto: Ditto;
+  innerRef?:React.Ref<HTMLParagraphElement>
 }
 
-const DittoCard : React.FC<DittoCardProps> = ({ ditto , ...props }) => {
+const DittoCard : React.FC<DittoCardProps> = ({ ditto , innerRef,...props }) => {
   return (
-    <p className="ditto-card" key={ditto.id} {...props}>
+    <p className="ditto-card" key={ditto.id} ref={innerRef  } {...props}>
       {ditto.title}
     </p>
   );

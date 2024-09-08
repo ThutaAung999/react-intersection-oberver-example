@@ -1,11 +1,16 @@
-import { useEffect, useState } from "react";
+
+import { useInView } from "react-intersection-observer";
 import "./App.css";
 import DittoCard from "./components/DittoCard";
 import { Ditto } from "./types/ditto";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 
 function App() {
-  const [dittos, setDittos] = useState<Ditto[]>([]);
+  
+  const { ref, inView} = useInView({
+    
+  });
 
   const getDittos = async ({ pageParam }: { pageParam: number }) => {
     // const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
@@ -33,13 +38,24 @@ function App() {
     },
   });
 
-  console.log(data);
+ // console.log(data);
 
   const content = data?.pages.map((dittos) =>
-    dittos.map((ditto: Ditto) => {
+    dittos.map((ditto: Ditto,index:number) => {
+      if(dittos.length === index+1){
+        return <DittoCard innerRef={ref} key={ditto.id} ditto={ditto} />;
+      }
       return <DittoCard key={ditto.id} ditto={ditto} />;
     })
   );
+
+
+  useEffect(() => {
+    if(inView && hasNextPage){
+    console.log("Fire");
+    fetchNextPage();
+    }
+  }, [ inView,hasNextPage,fetchNextPage]);
 
   if (status === "pending") return <div>Loading...</div>;
   if (status === "error") return <div>Error :{error.message}</div>;
@@ -47,7 +63,8 @@ function App() {
   return (
     <div className="app">
       {content}
-      <button
+      {/* <button
+      ref={ref}
         disabled={!hasNextPage || isFetchingNextPage}
         onClick={() => fetchNextPage()}
       >
@@ -56,7 +73,8 @@ function App() {
           : hasNextPage
           ? "Load More"
           : "Nothing more to load"}
-      </button>
+      </button> */}
+      {isFetchingNextPage && <div>Loading...</div>}
     </div>
   );
 }
