@@ -13,13 +13,13 @@ function App() {
   });
 
   const getDittos = async ({ pageParam }: { pageParam: number }) => {
-    // const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
-
-    // console.log(props);
+    const limit = 20; // Set a reasonable limit per page
+    const offset = pageParam * limit; // Calculate the offset based on the page number
     const response = await fetch(
-      `https://jsonplaceholder.typicode.com/todos?_page=${pageParam}`
+      `https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`
     );
-    return response.json();
+    const data = await response.json();
+    return data.results;
   };
 
   const {

@@ -23,7 +23,7 @@ interface DittoCardProps  extends React.HTMLAttributes<HTMLParagraphElement>{
 const DittoCard : React.FC<DittoCardProps> = ({ ditto , innerRef,...props }) => {
   return (
     <p className="ditto-card" key={ditto.id} ref={innerRef  } {...props}>
-      {ditto.title}
+      {ditto.name}
     </p>
   );
 };
